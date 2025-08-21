@@ -9,5 +9,12 @@
 </h1>
 <br/>
 <a href="hello-servlet">Hello Servlet</a>
+<form action="getData" method="GET">
+    <button value="submit">Call get method</button>
+</form>
+<br>
+<form action="postData" method="POST">
+    <button value="submit">Call post method</button>
+</form>
 </body>
 </html>
