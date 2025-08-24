@@ -1,20 +1,32 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>JSP - Hello World</title>
+    <title>Servlet CRUD Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            text-align: center;
+            padding: 50px;
+        }
+        h1 { color: #333; }
+        a {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 15px;
+            text-decoration: none;
+            background: #007bff;
+            color: white;
+            border-radius: 5px;
+        }
+        a:hover {
+            background: #0056b3;
+        }
+    </style>
 </head>
 <body>
-<h1><%= "Hello World!" %>
-</h1>
-<br/>
-<a href="hello-servlet">Hello Servlet</a>
-<form action="getData" method="GET">
-    <button value="submit">Call get method</button>
-</form>
-<br>
-<form action="postData" method="POST">
-    <button value="submit">Call post method</button>
-</form>
+    <h1>Welcome to Servlet CRUD Demo</h1>
+    <a href="users">View All Users</a>
+    <a href="addUser.html">Add New User</a>
 </body>
 </html>

@@ -9,46 +9,92 @@ import jakarta.servlet.annotation.*;
 
 @WebServlet(name = "helloServlet", value = "/hello-servlet")
 public class HelloServlet extends HttpServlet {
-    private String message;
-
-//    public void init () {
-//        message = "Servlet Example!";
-//    }
-
+    private UserDAO userDAO;
 
     @Override
-    public void init (ServletConfig config) throws ServletException {
+    public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        message = "Servlet Example!";
+        userDAO = new UserDAO();
+
+        // ServletConfig demo
+        String appName = config.getInitParameter("appName");
+        System.out.println("ServletConfig appName: " + appName);
+
+        // ServletContext demo
+        ServletContext context = config.getServletContext();
+        context.setAttribute("globalMessage", "Hello from ServletContext!");
     }
 
-    public void doGet (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        super.doGet(request, response);
-        response.setContentType("text/html");
+    // READ all users
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        List<User> users = userDAO.findAll();
+        PrintWriter out = resp.getWriter();
 
-        // Hello
-        PrintWriter out = response.getWriter();
-        out.println("<html><body>");
-        out.println("<h1>Servlet Example</h1>");
-        out.println("</body></html>");
-        System.out.println("Post method called!");
+        // Session tracking demo
+        HttpSession session = req.getSession();
+        session.setAttribute("lastAction", "Viewed users");
+
+        out.println("<h2>User List</h2>");
+        for (User u : users) {
+            out.println("<p>" + u.getId() + " - " + u.getName() + " - " + u.getEmail() + "</p>");
+        }
+    }
+
+    // CREATE a user
+    @Override
+protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    String method = req.getParameter("_method");
+
+    if (method == null) { // CREATE
+        String name = req.getParameter("name");
+        String email = req.getParameter("email");
+
+        User user = new User();
+        user.setName(name);
+        user.setEmail(email);
+        userDAO.save(user);
+
+        resp.sendRedirect("users");
+    } else if (method.equals("put")) { // UPDATE
+        int id = Integer.parseInt(req.getParameter("id"));
+        String name = req.getParameter("name");
+        String email = req.getParameter("email");
+
+        User user = new User(id, name, email);
+        userDAO.update(user);
+
+        resp.sendRedirect("users");
+    } else if (method.equals("delete")) { // DELETE
+        int id = Integer.parseInt(req.getParameter("id"));
+        userDAO.delete(id);
+        resp.sendRedirect("users");
+    }
+}
+
+    // UPDATE user
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        int id = Integer.parseInt(req.getParameter("id"));
+        String name = req.getParameter("name");
+        String email = req.getParameter("email");
+
+        User user = new User(id, name, email);
+        userDAO.update(user);
+
+        resp.getWriter().println("User updated successfully!");
+    }
+
+    // DELETE user
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        int id = Integer.parseInt(req.getParameter("id"));
+        userDAO.delete(id);
+        resp.getWriter().println("User deleted successfully!");
     }
 
     @Override
-    protected void doPost (HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doPost(req, resp);
-
-        System.out.println("Post method called!");
-    }
-
-//    public void destroy () {
-//        System.out.println("Destroying all the resources!");
-//    }
-
-
-    @Override
-    public void destroy () {
-        super.destroy();
-        System.out.println("Destroying all the resources!");
+    public void destroy() {
+        System.out.println("Servlet is being destroyed...");
     }
 }
