@@ -1,10 +1,12 @@
 package com.servletexample.servletexample.dao;
 
-import com.example.model.User;
+
+import com.servletexample.servletexample.entity.User;
+
 import java.util.*;
 
 public class UserDAO {
-    private static Map<Integer, User> users = new HashMap<>();
+    private static final Map<Integer, User> users = new HashMap<>();
     private static int idCounter = 1;
 
     public List<User> findAll() {

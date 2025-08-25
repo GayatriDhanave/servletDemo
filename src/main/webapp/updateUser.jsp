@@ -1,3 +1,5 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -54,6 +56,6 @@
         <input type="email" name="email" value="<%= request.getParameter("email") %>"><br><br>
         <input type="submit" value="Update">
     </form>
-    <a href="users">Back to List</a>
+    <a href="users.jsp">Back to List</a>
 </body>
 </html>

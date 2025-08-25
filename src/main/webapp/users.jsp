@@ -1,4 +1,4 @@
-<%@ page import="java.util.*, com.example.model.User" %>
+<%@ page import="java.util.*, com.servletexample.servletexample.entity.User" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -95,8 +95,8 @@
         </tr>
         <% } %>
     </table>
-
-    <a href="addUser.html">Add New User</a>
-    <a href="index.html">Home</a>
+<br>
+    <a href="addUser.jsp">Add New User</a>
+    <a href="index.jsp">Home</a>
 </body>
 </html>

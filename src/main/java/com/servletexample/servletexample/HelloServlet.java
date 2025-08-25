@@ -1,37 +1,40 @@
 package com.servletexample.servletexample;
 
 import java.io.*;
+import java.util.List;
 
-import jakarta.servlet.ServletConfig;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.*;
-import jakarta.servlet.annotation.*;
+import com.servletexample.servletexample.dao.UserDAO;
+import com.servletexample.servletexample.entity.User;
+//import jakarta.servlet.ServletConfig;
+//import jakarta.servlet.ServletContext;
+//import jakarta.servlet.ServletException;
+//import jakarta.servlet.http.*;
+//import jakarta.servlet.annotation.*;
 
-@WebServlet(name = "helloServlet", value = "/hello-servlet")
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+//@WebServlet(name = "helloServlet", value = "/hello-servlet")
+
 public class HelloServlet extends HttpServlet {
+
     private UserDAO userDAO;
 
-    @Override
-    public void init(ServletConfig config) throws ServletException {
-        super.init(config);
-        userDAO = new UserDAO();
+//    @Override
+//    public void init() throws ServletException {
+//        super.init();
+//        userDAO = new UserDAO();
+//        System.out.println("Server Initialized");
+//    }
 
-        // ServletConfig demo
-        String appName = config.getInitParameter("appName");
-        System.out.println("ServletConfig appName: " + appName);
-
-        // ServletContext demo
-        ServletContext context = config.getServletContext();
-        context.setAttribute("globalMessage", "Hello from ServletContext!");
-    }
-
-    // READ all users
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         List<User> users = userDAO.findAll();
         PrintWriter out = resp.getWriter();
 
-        // Session tracking demo
         HttpSession session = req.getSession();
         session.setAttribute("lastAction", "Viewed users");
 
@@ -41,12 +44,14 @@ public class HelloServlet extends HttpServlet {
         }
     }
 
-    // CREATE a user
-    @Override
-protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-    String method = req.getParameter("_method");
 
-    if (method == null) { // CREATE
+    @Override
+protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    String method = req.getParameter("_method");
+        System.out.println("doPost");
+
+    if (method == null) {
+        System.out.println("add user");
         String name = req.getParameter("name");
         String email = req.getParameter("email");
 
@@ -55,8 +60,12 @@ protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws I
         user.setEmail(email);
         userDAO.save(user);
 
-        resp.sendRedirect("users");
-    } else if (method.equals("put")) { // UPDATE
+        String contextPath = req.getContextPath();
+        System.out.println(contextPath);
+        resp.sendRedirect(contextPath);
+//        resp.sendRedirect("users");
+    } else if (method.equals("put")) {
+        System.out.println("update");
         int id = Integer.parseInt(req.getParameter("id"));
         String name = req.getParameter("name");
         String email = req.getParameter("email");
@@ -65,14 +74,16 @@ protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws I
         userDAO.update(user);
 
         resp.sendRedirect("users");
-    } else if (method.equals("delete")) { // DELETE
+    } else if (method.equals("delete")) {
+        System.out.println("delete");
         int id = Integer.parseInt(req.getParameter("id"));
         userDAO.delete(id);
-        resp.sendRedirect("users");
+        String contextPath = req.getContextPath();
+        resp.sendRedirect(contextPath);
     }
 }
 
-    // UPDATE user
+
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         int id = Integer.parseInt(req.getParameter("id"));
@@ -85,7 +96,7 @@ protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws I
         resp.getWriter().println("User updated successfully!");
     }
 
-    // DELETE user
+
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         int id = Integer.parseInt(req.getParameter("id"));
@@ -98,3 +109,5 @@ protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws I
         System.out.println("Servlet is being destroyed...");
     }
 }
+
+//http://localhost:8080/servletExample_war_exploded/

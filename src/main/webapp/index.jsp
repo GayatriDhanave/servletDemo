@@ -1,3 +1,4 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -26,7 +27,7 @@
 </head>
 <body>
     <h1>Welcome to Servlet CRUD Demo</h1>
-    <a href="users">View All Users</a>
-    <a href="addUser.html">Add New User</a>
+    <a href="users.jsp">View All Users</a>
+    <a href="addUser.jsp">Add New User</a>
 </body>
 </html>
