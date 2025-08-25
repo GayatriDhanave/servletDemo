@@ -53,7 +53,7 @@ public class DemoServlet extends HttpServlet {
                 "            border-collapse: collapse;\n" +
                 "            width: 80%;\n" +
                 "            background: white;\n" +
-                "            box-shadow: 0 0 10px rgba(0,0,0,0.1);\n" +
+                "            box-shadow: 0 0 20px rgba(0,0,0,0.1);\n" +
                 "        }\n" +
                 "        th, td {\n" +
                 "            padding: 12px;\n" +
@@ -111,11 +111,12 @@ public class DemoServlet extends HttpServlet {
                     "                    <input type=hidden name=email value=" +u.getEmail()+">\n" +
                     "                    <input type=submit value=Update>\n" +
                     "                </form>");
+            out.println("<tr><td>"+u.getName()+"</td>   <td>"+u.getEmail()+"</td></tr>");
             out.println("<form action=users method=post onsubmit=return confirm('Delete this user?');>\n" +
                     "                    <input type=hidden name=_method value=delete>\n" +
                     "                    <input type=hidden name=id value="+u.getId() +">\n" +
                     "                    <input type=submit value=Delete>\n" +
-                    "                </form>");
+                    "                </form><br>");
         }
         out.println("<br>\n" +
                 "    <a href=\"addUser.jsp\">Add New User</a>\n" +
